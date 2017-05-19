@@ -20,7 +20,8 @@ import java.util.logging.Logger;
 public class Board extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
 
     TorpedoView view;
-
+    TorpedoClient client;
+    
     public Board() {
         initBoard();
 
@@ -38,10 +39,12 @@ public class Board extends JPanel implements ActionListener, MouseListener, Mous
         setFocusable(true);
         setBackground(new Color(1, 95, 135));
         setDoubleBuffered(true);
+        paintImmediately(0, 0, getWidth(), getHeight());
         view = new TorpedoView(getPreferredSize().getWidth(),getPreferredSize().getHeight());
-        
+        client = new TorpedoClient(this, view);    
 
     }
+    
 
     @Override
     public void paintComponent(Graphics g) {
@@ -57,15 +60,17 @@ public class Board extends JPanel implements ActionListener, MouseListener, Mous
     void update() {
        
     }
-
-
+    
     @Override
     public void mouseClicked(MouseEvent e) {
+        
+        
         
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        client.mousePressed(e);
         
     }
 
@@ -103,7 +108,7 @@ public class Board extends JPanel implements ActionListener, MouseListener, Mous
 
         @Override
         public void keyPressed(KeyEvent e) {
-           
+           client.keyPressed(e);
         }
     }
 

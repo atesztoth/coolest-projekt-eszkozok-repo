@@ -36,7 +36,7 @@ public class Torpedo extends JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             Torpedo torpedo = new Torpedo();
             torpedo.setVisible(true);
-        });
+            });
     }
     
 }

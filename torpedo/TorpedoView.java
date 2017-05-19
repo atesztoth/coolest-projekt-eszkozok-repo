@@ -19,6 +19,15 @@ class TorpedoView {
 
     private double width;
     private double height;
+    private boolean myTurn;
+    private boolean win;
+    private boolean lose;
+    private boolean start = false;
+    private boolean wait= false;
+
+    public void setStart(boolean start) {
+        this.start = start;
+    }
 
     private Tile[][] own;
     private Tile[][] enemy;
@@ -26,30 +35,25 @@ class TorpedoView {
     TorpedoView(double width, double height) {
         this.width = width;
         this.height = height;
-        int[][] tmp = new int[10][10];
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                tmp[i][j] = 0;
-            }
-        }
-        tmp[3][5] = 1;
-        tmp[7][8] = 2;
-        enemy=createTiles(tmp,(int)(width/2+width/20),(int)(height/5));
-        tmp[3][5] = 0;
-        tmp[7][8] = 0;
-        tmp[1][1] = 3;
-        tmp[1][2] = 3;
-        tmp[1][4] = 3;
-        tmp[1][5] = 4;
 
-        own = createTiles(tmp,(int)(width/20),(int)(height/5));
-        
     }
 
-    void draw(Graphics g) {
-        drawText(g);
-        drawTiles(g, own);
-        drawTiles(g, enemy);
+    public void draw(Graphics g) {
+        if (!start) {
+            drawKey(g);
+        } else {
+            drawText(g);
+            drawTiles(g, own);
+            drawTiles(g, enemy);
+            drawTurn(g, myTurn);
+            if (win) {
+                drawWin(g);
+            }
+            if (lose) {
+                drawLose(g);
+            }
+
+        }
 
     }
 
@@ -63,12 +67,23 @@ class TorpedoView {
         }
     }
 
-    private Tile[][] createTiles(int[][] types,int x, int y) {
+    public void setTiles(int[][] types) {
+        int[][] tmp = new int[10][10];
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                tmp[i][j] = 0;
+            }
+        }
+        enemy = createTiles(tmp, (int) (width / 2 + width / 20), (int) (height / 5));
+        own = createTiles(types, (int) (width / 20), (int) (height / 5));
+    }
+
+    private Tile[][] createTiles(int[][] types, int x, int y) {
         Tile[][] tiles = new Tile[10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                tiles[i][j] = new Tile((int)(x + i *width/25) , (int)(y+ j *width/25 ) , (int)(width/25),(int)(width/25) , types[i][j]);
-                        
+                tiles[i][j] = new Tile((int) (x + i * width / 25), (int) (y + j * width / 25), (int) (width / 25), (int) (width / 25), types[i][j]);
+
             }
         }
         return tiles;
@@ -76,9 +91,78 @@ class TorpedoView {
 
     private void drawText(Graphics g) {
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.PLAIN, (int)(height / 15)));
-        g.drawString("Sajat", (int)(width/5), (int)(height/7));
-        g.drawString("Ellenfel", (int)(width/2+width/5), (int)(height/7));
+        g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
+        g.drawString("Own", (int) (width / 5), (int) (height / 7));
+        g.drawString("Enemy's", (int) (width / 2 + width / 5), (int) (height / 7));
     }
 
+    void setTurn(boolean myTurn) {
+        this.myTurn = myTurn;
+    }
+
+    private void drawTurn(Graphics g, boolean myTurn) {
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
+        if (myTurn) {
+            g.drawString("My turn", (int) (width / 2 - width / 10), (int) (height - height / 10));
+        } else {
+            g.drawString("Enemy's turn", (int) (width / 2 - width / 10), (int) (height - height / 10));
+        }
+
+    }
+
+    String getTarget(MouseEvent e) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (enemy[i][j].contains(e.getPoint())) {
+                    return i + " " + j;
+                }
+            }
+        }
+        return null;
+    }
+
+    void setEnd() {
+        lose = true;
+    }
+
+    void setTarget(String target, boolean b) {
+        String[] coord = target.split(" ");
+        if (b) {
+            enemy[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])].setType(1);
+        } else {
+            enemy[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])].setType(2);
+        }
+    }
+
+    void setTile(int i, int j) {
+        if (own[i][j].getType() == 3) {
+            own[i][j].setType(4);
+        } else {
+            own[i][j].setType(2);
+        }
+    }
+
+    private void drawWin(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void drawLose(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void drawKey(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 10)));
+        if(!wait){
+          g.drawString("Press any key to start...", (int) (width / 5), (int) (height/2 - height / 10));  
+        }else{
+            g.drawString("Waiting for other player", (int) (width / 5), (int) (height/2 - height / 10));
+        }
+        
+    }
+
+    void setWait() {
+        wait=true;
+    }
 }
