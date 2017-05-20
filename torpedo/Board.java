@@ -13,20 +13,27 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-
+/**
+ * Class of the JPanel, which contains the interface for the game. 
+ * @author mmeta
+ */
 public class Board extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
 
     TorpedoView view;
     TorpedoClient client;
     
+    /**
+     * Class constructor 
+     */
     public Board() {
         initBoard();
 
     }
-
+    
+     /**
+     * Sets the basic parameters of the JPanel, and creates the View and Client. 
+     */
     private void initBoard() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenSize.getWidth();
@@ -45,7 +52,10 @@ public class Board extends JPanel implements ActionListener, MouseListener, Mous
 
     }
     
-
+    /**
+     * Method responsible for calling the draw method of the view. 
+     * @param  g Graphics object we can use to draw on the Panel.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -57,21 +67,19 @@ public class Board extends JPanel implements ActionListener, MouseListener, Mous
     public void actionPerformed(ActionEvent e) {
     }
 
-    void update() {
-       
-    }
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        
-        
-        
+           
     }
-
+    
+    /**
+     * Method responsible for calling the mousePressed method of the client. 
+     * @param  e the MouseEvent
+     */
     @Override
     public void mousePressed(MouseEvent e) {
-        client.mousePressed(e);
-        
+        client.mousePressed(e);    
     }
 
     @Override
@@ -98,7 +106,9 @@ public class Board extends JPanel implements ActionListener, MouseListener, Mous
     public void mouseMoved(MouseEvent e) {
         
     }
-
+    /**
+    * Method responsible for calling the mousePressed method of the client. 
+    */
     private class Controller extends KeyAdapter {
 
         @Override
@@ -106,6 +116,12 @@ public class Board extends JPanel implements ActionListener, MouseListener, Mous
            
         }
 
+        
+        /**
+         * Method responsible for calling the mousePressed method of the client.
+         *
+         * @param e the KeyEvent
+         */
         @Override
         public void keyPressed(KeyEvent e) {
            client.keyPressed(e);

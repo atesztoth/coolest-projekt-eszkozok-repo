@@ -1,17 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package torpedo;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
+ * Class that draws the user interface
  *
  * @author mmeta
  */
@@ -21,19 +17,31 @@ class TorpedoView {
     private double height;
     private boolean myTurn;
     private boolean win;
-    private boolean lose=false;
+    private boolean lose = false;
     private boolean start = false;
     private boolean error = false;
-    
+
+    /**
+     *
+     * @param win Boolean to set.
+     */
     public void setWin(boolean win) {
         this.win = win;
     }
 
+    /**
+     *
+     * @param lose Boolean to set.
+     */
     public void setLose(boolean lose) {
         this.lose = lose;
     }
-    private boolean wait= false;
+    private boolean wait = false;
 
+    /**
+     *
+     * @param start Boolean to set.
+     */
     public void setStart(boolean start) {
         this.start = start;
     }
@@ -41,28 +49,42 @@ class TorpedoView {
     private Tile[][] own;
     private Tile[][] enemy;
 
+    /**
+     * Class constructor.
+     *
+     * @param width Width of the panel.
+     * @param height Height of the Panel.
+     */
     TorpedoView(double width, double height) {
         this.width = width;
         this.height = height;
 
     }
 
+    /**
+     * Draws the interface.
+     *
+     * @param g Graphics object.
+     */
     public void draw(Graphics g) {
         if (!start) {
-            drawKey(g);
+            if (error) {
+                drawError(g);
+            } else {
+                drawKey(g);
+            }
+
         } else {
             drawText(g);
             drawTiles(g, own);
             drawTiles(g, enemy);
-            if(error){
+            if (error) {
                 drawError(g);
-            }
-            else if (win) {
+            } else if (win) {
                 drawWin(g);
-            }
-            else if (lose) {
+            } else if (lose) {
                 drawLose(g);
-            }else{
+            } else {
                 drawTurn(g, myTurn);
             }
 
@@ -70,6 +92,12 @@ class TorpedoView {
 
     }
 
+    /**
+     * Draws the map..
+     *
+     * @param g Graphics object.
+     * @param tiles Tiles of the map.
+     */
     protected void drawTiles(Graphics g, Tile[][] tiles) {
 
         for (Tile[] tile1 : tiles) {
@@ -80,6 +108,11 @@ class TorpedoView {
         }
     }
 
+    /**
+     * Creates the map of tiles at the right place.
+     *
+     * @param types Types of the tiles.
+     */
     public void setTiles(int[][] types) {
         int[][] tmp = new int[10][10];
         for (int i = 0; i < 10; i++) {
@@ -91,6 +124,13 @@ class TorpedoView {
         own = createTiles(types, (int) (width / 20), (int) (height / 5));
     }
 
+    /**
+     * Creates the tiles of the maps.
+     *
+     * @param types Types of the tiles to create.
+     * @param x X coordinate of the map of the tiles.
+     * @param y Y coordinate of the map of the tiles.
+     */
     private Tile[][] createTiles(int[][] types, int x, int y) {
         Tile[][] tiles = new Tile[10][10];
         for (int i = 0; i < 10; i++) {
@@ -102,6 +142,11 @@ class TorpedoView {
         return tiles;
     }
 
+    /**
+     * Draws the map text.
+     *
+     * @param g Graphics object.
+     */
     private void drawText(Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
@@ -109,10 +154,20 @@ class TorpedoView {
         g.drawString("Enemy's", (int) (width / 2 + width / 5), (int) (height / 7));
     }
 
+    /**
+     *
+     * @param myTurb Boolean to set.
+     */
     void setTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
 
+    /**
+     * Draws the turn text.
+     *
+     * @param g Graphics object.
+     * @param myTurn Whether it's the player turn.
+     */
     private void drawTurn(Graphics g, boolean myTurn) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
@@ -124,10 +179,16 @@ class TorpedoView {
 
     }
 
+    /**
+     * Get the coordinate of the clicked tile.
+     *
+     * @param e MouseEvent object.
+     * @return Coordinates of the tile clicked. Null if it's outside enemy map.
+     */
     String getTarget(MouseEvent e) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                if (enemy[i][j].contains(e.getPoint()) && enemy[i][j].getType()==0) {
+                if (enemy[i][j].contains(e.getPoint()) && enemy[i][j].getType() == 0) {
                     return i + " " + j;
                 }
             }
@@ -135,15 +196,29 @@ class TorpedoView {
         return null;
     }
 
-    void setTarget(String target, boolean b) {
+    /**
+     * Sets the target tile to the correct type.
+     *
+     * @param target Coordinates of the target.
+     * @param hit Target or miss.
+     * @return Coordinates of the tile clicked. Null if it's outside enemy map.
+     */
+    void setTarget(String target, boolean hit) {
         String[] coord = target.split(" ");
-        if (b) {
+        if (hit) {
             enemy[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])].setType(1);
         } else {
             enemy[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])].setType(2);
         }
     }
 
+    /**
+     * Sets own tile based on enemy's tip.
+     *
+     * @param i X coordinate of enemys tip.
+     * @param j Y coordinate of enemys tip.
+     * @return Coordinates of the tile clicked. Null if it's outside enemy map.
+     */
     void setTile(int i, int j) {
         if (own[i][j].getType() == 3) {
             own[i][j].setType(4);
@@ -152,37 +227,65 @@ class TorpedoView {
         }
     }
 
+    /**
+     * Draws the win text.
+     *
+     * @param g Graphics object.
+     */
     private void drawWin(Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
         g.drawString("You WIN", (int) (width / 2 - width / 10), (int) (height - height / 10));
     }
 
+    /**
+     * Draws the lose text.
+     *
+     * @param g Graphics object.
+     */
     private void drawLose(Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
         g.drawString("You LOSE", (int) (width / 2 - width / 10), (int) (height - height / 10));
     }
 
+    /**
+     * Draws the waiting text.
+     *
+     * @param g Graphics object.
+     */
     private void drawKey(Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 10)));
-        if(!wait){
-          g.drawString("Press any key to start...", (int) (width / 5), (int) (height/2 - height / 10));  
-        }else{
-            g.drawString("Waiting for other player", (int) (width / 5), (int) (height/2 - height / 10));
+        if (!wait) {
+            g.drawString("Press any key to start...", (int) (width / 5), (int) (height / 2 - height / 10));
+        } else {
+            g.drawString("Waiting for other player", (int) (width / 5), (int) (height / 2 - height / 10));
         }
-        
+
     }
 
+    /**
+     *
+     * Set wait to true.
+     */
     void setWait() {
-        wait=true;
+        wait = true;
     }
 
-    void setError(boolean b) {
-        error=b;
+    /**
+     *
+     * @param error Boolean to set.
+     */
+    void setError(boolean error) {
+        this.error = error;
     }
 
+    /**
+     * Draws the error text.
+     *
+     * @param g Graphics object.
+     */
     private void drawError(Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));

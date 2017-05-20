@@ -1,14 +1,6 @@
 package torpedo;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author mmeta
- */
+
 import java.awt.Panel;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -20,6 +12,11 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/**
+ * Class that implements the main functionality of the client.
+ *
+ * @author mmeta
+ */
 public class TorpedoClient {
 
     private final JPanel panel;
@@ -31,17 +28,25 @@ public class TorpedoClient {
     private boolean start = false;
     private boolean game = true;
 
+    /**
+     * Class constructor.
+     *
+     * @param panel The panel on which we draw on.
+     * @param view The object which draws our interface.
+     */
     public TorpedoClient(JPanel panel, TorpedoView view) {
         this.panel = panel;
         this.view = view;
         panel.repaint();
-//        try {
-//            start();
-//        } catch (IOException ex) {
-//            Logger.getLogger(TorpedoClient.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
     }
 
+    /**
+     * Starts the client. It connects to the server and answers to the first
+     * step if it goes second.
+     *
+     * @throws IOException
+     */
     private void start() throws IOException {
         try {
             //System.out.println("Start");
@@ -85,13 +90,21 @@ public class TorpedoClient {
             }
             view.setTurn(true);
             panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | ConnectException e) {
             view.setError(true);
             panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
             game = false;
         }
     }
 
+    /**
+     * It creates the map of the interface, which the ships are on. Converts the
+     * shipLines to the representation that the view can use.
+     *
+     * @param myTurn Whether it's the plyers turn or not.
+     * @param shipLines List which contains the ships coordinates in String
+     * format, that we received from the server.
+     */
     private void createView(LinkedList<String> shipLines, boolean myTurn) {
         int[][] types = new int[10][10];
         for (int i = 0; i < 10; i++) {
@@ -125,6 +138,13 @@ public class TorpedoClient {
 
     }
 
+    /**
+     * Send our target to the server and modifies the view and the client based
+     * on the answer. It only send the target, if it's valid, so it's an empty
+     * tile on the enemy's field.
+     *
+     * @param e the MouseEvent
+     */
     void mousePressed(MouseEvent e) {
         new Thread() {
             @Override
@@ -182,8 +202,12 @@ public class TorpedoClient {
         }.start();
     }
 
+    /**
+     * Method responsible for calling the mousePressed method of the client.
+     *
+     * @param e the KeyEvent
+     */
     void keyPressed(KeyEvent e) {
-        //System.out.println("dafsdf");
         if (start == false) {
             try {
                 start();
@@ -192,7 +216,12 @@ public class TorpedoClient {
             }
         }
     }
-
+    /**
+    * Checks if all the ships is destroyed.
+    *
+    * @param coord Matrix which contains the positions of the ships, past tips.
+    * @return Whether the game is over.
+    */
     private boolean gameOver(String[] coord) {
         if (map[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])] == 3) {
             int count = 0;

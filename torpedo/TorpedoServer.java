@@ -1,33 +1,37 @@
 package torpedo;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author mmeta
- */
+
 import java.net.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Class that implements the functionality of the server.
+ *
+ * @author mmeta
+ */
 public class TorpedoServer {
 
     private final int port;
     private ServerSocket server;
     private int id = 1;
-    private String fileInput;
-    private String fileOutput;
     private int player = 2;
 
+    /**
+     * Class constructor.
+     *
+     * @param port Port to start the server on.
+     * @throws IOException
+     */
     TorpedoServer(int port) throws IOException {
         this.port = port;
         server = new ServerSocket(port);
     }
 
-    //fogadja a klienseket es minden jatekmenethez letrehoz egy uj szalat
+    /**
+     *
+     * Accepts the client and starts the game.
+     */
     public void acceptClients() {
         try {
             Socket[] sockets = new Socket[player];
@@ -42,6 +46,11 @@ public class TorpedoServer {
         }
     }
 
+    /**
+     * Main method, creates the server, and starts to accept clients.
+     *
+     * @param args Doesn't use the command line parameters.
+     */
     public static void main(String[] args) {
         try {
             TorpedoServer server = new TorpedoServer(60504);
@@ -52,6 +61,9 @@ public class TorpedoServer {
         }
     }
 
+    /**
+     * Class that implements the game logic.
+     */
     class Game {
 
         private int id;
@@ -60,6 +72,13 @@ public class TorpedoServer {
         private LinkedList<String>[] ships;
         private String[] names;
 
+        /**
+         * Class that implements the game logic.
+         *
+         * @param sockets Array of the player sockets.
+         * @param id Id of the game.
+         * @throws IOException
+         */
         public Game(Socket[] sockets, int id) throws IOException {
             this.id = id;
             pw = new PrintWriter[player];
@@ -73,6 +92,11 @@ public class TorpedoServer {
             }
         }
 
+        /**
+         * Send the messages to the clients, managing the game.
+         *
+         * @throws IOException
+         */
         public void run() throws IOException {
             try {
                 for (int i = 0; i < player; i++) {
@@ -89,7 +113,6 @@ public class TorpedoServer {
                 boolean win = false;
                 while (game) {
                     for (int i = 0; i < player; i++) {
-                        //System.out.println("fuck");
                         valasz = sc[i].nextLine();
                         pw[(i + 1) % player].println(valasz);
                         valasz = sc[(i + 1) % player].nextLine();
@@ -99,12 +122,12 @@ public class TorpedoServer {
                             win = true;
                             break;
                         } else {
-                           pw[i].println(valasz);   
+                            pw[i].println(valasz);
                         }
                     }
 
                 }
-            } catch (NoSuchElementException e) {  
+            } catch (NoSuchElementException e) {
                 e.printStackTrace();
             } finally {
                 for (int i = 0; i < player; i++) {
@@ -114,6 +137,11 @@ public class TorpedoServer {
             }
         }
 
+        /**
+         * Creates a random list of ships.
+         *
+         * @return List of ship coordinates in String format.
+         */
         private LinkedList<String> createRandomShips() {
             LinkedList<String> ships = new LinkedList<>();
             Random rand = new Random();
