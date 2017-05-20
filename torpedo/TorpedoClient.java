@@ -43,93 +43,85 @@ public class TorpedoClient {
     }
 
     private void start() throws IOException {
+        try {
+            //System.out.println("Start");
+            final String gep = "localhost";
+            final int port = 60504;
+            boolean game = true;
+            boolean win = false;
 
-        //System.out.println("Start");
-        final String gep = "localhost";
-        final int port = 60504;
-        boolean game = true;
-        boolean win = false;
+            Socket s = new Socket(gep, port);
+            pw = new PrintWriter(s.getOutputStream(), true);
+            sc = new Scanner(s.getInputStream());
+            LinkedList<String> ships = new LinkedList<>();
+            String valasz;
 
-        Socket s = new Socket(gep, port);
-        pw = new PrintWriter(s.getOutputStream(), true);
-        sc = new Scanner(s.getInputStream());
-        LinkedList<String> ships = new LinkedList<>();
-        String valasz;
+            view.setWait();
+            panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
 
-        view.setWait();
-        panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
-//            }
-//        });
-
-        for (int i = 0; i < 5; i++) {
-            valasz = sc.nextLine();
-            ships.add(valasz);
-        }
-        valasz = sc.nextLine();
-        //System.out.println(valasz);
-        myTurn = valasz.equals("FIRST");
-        createView(ships, myTurn);
-
-        if (!myTurn) {
-            valasz = sc.nextLine();
-            String[] coord = valasz.split(" ");
-            if (map[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])] == 0) {
-                pw.println("MISS");
-            } else {
-                pw.println("HIT");
-                map[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])] = 0;
+            for (int i = 0; i < 5; i++) {
+                valasz = sc.nextLine();
+                ships.add(valasz);
             }
-            view.setTile(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
-            myTurn = true;
+            valasz = sc.nextLine();
+            //System.out.println(valasz);
+            myTurn = valasz.equals("FIRST");
+            createView(ships, myTurn);
 
-        }else{
+            if (!myTurn) {
+                valasz = sc.nextLine();
+                String[] coord = valasz.split(" ");
+                if (map[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])] == 0) {
+                    pw.println("MISS");
+                } else {
+                    pw.println("HIT");
+                    map[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])] = 0;
+                }
+                view.setTile(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
+                myTurn = true;
+
+            } else {
+                view.setTurn(true);
+            }
             view.setTurn(true);
+            panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
+        } catch (NoSuchElementException e) {
+            view.setError(true);
+            panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
+            game = false;
         }
-        view.setTurn(true);
-          panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
-
     }
 
     private void createView(LinkedList<String> shipLines, boolean myTurn) {
-//        try {
-            int[][] types = new int[10][10];
-            for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 10; j++) {
-                    types[i][j] = 0;
-                }
+        int[][] types = new int[10][10];
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                types[i][j] = 0;
             }
-            for (String s : shipLines) {
-                String[] shipString = s.split(" ");
-                int[] ship = new int[shipString.length];
-                for (int j = 0; j < ship.length; j++) {
-                    ship[j] = Integer.parseInt(shipString[j]);
-                }
-                for (int i = 0; i < ship.length; i = i + 2) {
-                    types[ship[i]][ship[i + 1]] = 3;
-                }
+        }
+        for (String s : shipLines) {
+            String[] shipString = s.split(" ");
+            int[] ship = new int[shipString.length];
+            for (int j = 0; j < ship.length; j++) {
+                ship[j] = Integer.parseInt(shipString[j]);
+            }
+            for (int i = 0; i < ship.length; i = i + 2) {
+                types[ship[i]][ship[i + 1]] = 3;
+            }
 
+        }
+        map = types;
+        view.setTiles(types);
+        view.setTurn(myTurn);
+        start = true;
+        view.setStart(true);
+        panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
             }
-            map = types;
-            view.setTiles(types);
-            view.setTurn(myTurn);
-            start = true;
-            view.setStart(true);
-            panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
-                }
-            });
-//        } catch (NoSuchElementException e) {
-//            view.setError(true);
-//            panel.paintImmediately(0, 0, panel.getWidth(), panel.getHeight());
-//            game = false;
-//        }
+        });
 
     }
 
