@@ -21,8 +21,17 @@ class TorpedoView {
     private double height;
     private boolean myTurn;
     private boolean win;
-    private boolean lose;
+    private boolean lose=false;
     private boolean start = false;
+    private boolean error = false;
+    
+    public void setWin(boolean win) {
+        this.win = win;
+    }
+
+    public void setLose(boolean lose) {
+        this.lose = lose;
+    }
     private boolean wait= false;
 
     public void setStart(boolean start) {
@@ -45,12 +54,16 @@ class TorpedoView {
             drawText(g);
             drawTiles(g, own);
             drawTiles(g, enemy);
-            drawTurn(g, myTurn);
-            if (win) {
+            if(error){
+                drawError(g);
+            }
+            else if (win) {
                 drawWin(g);
             }
-            if (lose) {
+            else if (lose) {
                 drawLose(g);
+            }else{
+                drawTurn(g, myTurn);
             }
 
         }
@@ -114,16 +127,12 @@ class TorpedoView {
     String getTarget(MouseEvent e) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                if (enemy[i][j].contains(e.getPoint())) {
+                if (enemy[i][j].contains(e.getPoint()) && enemy[i][j].getType()==0) {
                     return i + " " + j;
                 }
             }
         }
         return null;
-    }
-
-    void setEnd() {
-        lose = true;
     }
 
     void setTarget(String target, boolean b) {
@@ -144,11 +153,15 @@ class TorpedoView {
     }
 
     private void drawWin(Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
+        g.drawString("You WIN", (int) (width / 2 - width / 10), (int) (height - height / 10));
     }
 
     private void drawLose(Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
+        g.drawString("You LOSE", (int) (width / 2 - width / 10), (int) (height - height / 10));
     }
 
     private void drawKey(Graphics g) {
@@ -164,5 +177,15 @@ class TorpedoView {
 
     void setWait() {
         wait=true;
+    }
+
+    void setError(boolean b) {
+        error=b;
+    }
+
+    private void drawError(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.PLAIN, (int) (height / 15)));
+        g.drawString("Kapcsolat megszakadt", (int) (width / 2 - width / 8), (int) (height - height / 10));
     }
 }

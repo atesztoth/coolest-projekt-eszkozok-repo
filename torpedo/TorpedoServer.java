@@ -89,16 +89,12 @@ public class TorpedoServer {
                 boolean win = false;
                 while (game) {
                     for (int i = 0; i < player; i++) {
-                        System.out.println("fuck");
+                        //System.out.println("fuck");
                         valasz = sc[i].nextLine();
                         pw[(i + 1) % player].println(valasz);
                         valasz = sc[(i + 1) % player].nextLine();
                         if (valasz.equals("VESZTETTEM")) {
-                            for (int k = 0; k < player; k++) {
-                                if (k != i) {
-                                    pw[k].println("VEGE");
-                                }
-                            }
+                            pw[i].println("VEGE");
                             game = false;
                             win = true;
                             break;
