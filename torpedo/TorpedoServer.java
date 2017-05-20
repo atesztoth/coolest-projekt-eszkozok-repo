@@ -21,7 +21,7 @@ public class TorpedoServer {
      * Class constructor.
      *
      * @param port Port to start the server on.
-     * @throws IOException
+     * @throws IOException If an input or output exception occurred.
      */
     TorpedoServer(int port) throws IOException {
         this.port = port;
@@ -77,7 +77,7 @@ public class TorpedoServer {
          *
          * @param sockets Array of the player sockets.
          * @param id Id of the game.
-         * @throws IOException
+         * @throws IOException If an input or output exception occurred.
          */
         public Game(Socket[] sockets, int id) throws IOException {
             this.id = id;
@@ -95,7 +95,7 @@ public class TorpedoServer {
         /**
          * Send the messages to the clients, managing the game.
          *
-         * @throws IOException
+         * @throws IOException If an input or output exception occurred.
          */
         public void run() throws IOException {
             try {

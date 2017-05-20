@@ -45,7 +45,8 @@ public class TorpedoClient {
      * Starts the client. It connects to the server and answers to the first
      * step if it goes second.
      *
-     * @throws IOException
+     * @throws IOException If an input or output exception occurred.
+
      */
     private void start() throws IOException {
         try {

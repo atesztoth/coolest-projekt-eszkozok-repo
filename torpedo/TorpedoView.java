@@ -130,6 +130,7 @@ class TorpedoView {
      * @param types Types of the tiles to create.
      * @param x X coordinate of the map of the tiles.
      * @param y Y coordinate of the map of the tiles.
+     * @return Array of the created Tiles.
      */
     private Tile[][] createTiles(int[][] types, int x, int y) {
         Tile[][] tiles = new Tile[10][10];
@@ -156,7 +157,7 @@ class TorpedoView {
 
     /**
      *
-     * @param myTurb Boolean to set.
+     * @param myTurn Boolean to set.
      */
     void setTurn(boolean myTurn) {
         this.myTurn = myTurn;
@@ -201,7 +202,6 @@ class TorpedoView {
      *
      * @param target Coordinates of the target.
      * @param hit Target or miss.
-     * @return Coordinates of the tile clicked. Null if it's outside enemy map.
      */
     void setTarget(String target, boolean hit) {
         String[] coord = target.split(" ");
@@ -217,7 +217,6 @@ class TorpedoView {
      *
      * @param i X coordinate of enemys tip.
      * @param j Y coordinate of enemys tip.
-     * @return Coordinates of the tile clicked. Null if it's outside enemy map.
      */
     void setTile(int i, int j) {
         if (own[i][j].getType() == 3) {
