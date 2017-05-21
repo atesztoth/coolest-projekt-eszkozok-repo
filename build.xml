@@ -1,0 +1,29 @@
+<project name="Torpedo" default="cleanandbuild">
+    <target name="cleanandbuild">
+            <delete dir="doc"/>
+            <delete dir="out"/>
+            <delete file="TorpedoClient.jar"/>
+            <delete file="TorpedoServer.jar"/>
+            <mkdir dir="out/classes" />
+            <javac srcdir="."
+            destdir="out/classes"
+            includeantruntime="false" />
+            <jar destfile="TorpedoClient.jar" basedir="out/classes">
+                    <fileset dir="images"/>
+                    <manifest>
+                            <attribute name="Main-Class"
+                            value="torpedo.Torpedo" />
+                    </manifest>
+            </jar>
+            <jar destfile="TorpedoServer.jar" basedir="out/classes">
+                    <fileset dir="images"/>
+                    <manifest>
+                            <attribute name="Main-Class"
+                            value="torpedo.TorpedoServer" />
+                    </manifest>
+            </jar>
+            <javadoc packagenames="torpedo" sourcepath="." access="private"
+              destdir = "doc" version = "true">
+       </javadoc>
+    </target>
+</project>

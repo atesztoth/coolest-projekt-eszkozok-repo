@@ -68,19 +68,19 @@ public class Tile extends Rectangle {
         switch (type) {
 
             case 0:
-                this.image = new ImageIcon(("images/tiles/base.png")).getImage();
+                this.image = new ImageIcon(Tile.class.getResource("/tiles/base.png")).getImage();
                 break;
             case 1:
-                this.image = new ImageIcon(("images/tiles/hit.png")).getImage();
+                this.image = new ImageIcon(Tile.class.getResource("/tiles/hit.png")).getImage();
                 break;
             case 2:
-                this.image = new ImageIcon(("images/tiles/miss.png")).getImage();
+                this.image = new ImageIcon(Tile.class.getResource("/tiles/miss.png")).getImage();
                 break;
             case 3:
-                this.image = new ImageIcon(("images/tiles/ship.png")).getImage();
+                this.image = new ImageIcon(Tile.class.getResource("/tiles/ship.png")).getImage();
                 break;
             case 4:
-                this.image = new ImageIcon(("images/tiles/damagedship.png")).getImage();
+                this.image = new ImageIcon(Tile.class.getResource("/tiles/damagedship.png")).getImage();
                 break;
 
         }
