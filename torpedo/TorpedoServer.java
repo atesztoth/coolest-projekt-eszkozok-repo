@@ -1,6 +1,5 @@
 package torpedo;
 
-
 import java.net.*;
 import java.io.*;
 import java.util.*;
@@ -12,9 +11,21 @@ import java.util.*;
  */
 public class TorpedoServer {
 
+    /**
+     * Port we start the server on.
+     */
     private final int port;
+    /**
+     * ServerSocket object.
+     */
     private ServerSocket server;
+    /**
+     * Id of the game.
+     */
     private int id = 1;
+    /**
+     * Number of players.
+     */
     private int player = 2;
 
     /**
@@ -64,16 +75,27 @@ public class TorpedoServer {
     /**
      * Class that implements the game logic.
      */
-    class Game {
-
-        private int id;
-        private PrintWriter[] pw;
-        private Scanner[] sc;
-        private LinkedList<String>[] ships;
-        private String[] names;
+    public class Game {
 
         /**
-         * Class that implements the game logic.
+         * Id of the game.
+         */
+        private int id;
+        /**
+         * PrintWriter object.
+         */
+        private PrintWriter[] pw;
+        /**
+         * Scanner object.
+         */
+        private Scanner[] sc;
+        /**
+         * Contains the coordinates of the ships in String representation.
+         */
+        private LinkedList<String>[] ships;
+
+        /**
+         * Class constructor.
          *
          * @param sockets Array of the player sockets.
          * @param id Id of the game.

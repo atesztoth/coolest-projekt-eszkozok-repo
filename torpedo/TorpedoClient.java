@@ -1,6 +1,5 @@
 package torpedo;
 
-
 import java.awt.Panel;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -19,13 +18,37 @@ import javax.swing.SwingUtilities;
  */
 public class TorpedoClient {
 
+    /**
+     * Panel which contains the interface.
+     */
     private final JPanel panel;
+    /**
+     * Object that draws the interface.
+     */
     private final TorpedoView view;
+    /**
+     * Player's turn or not.
+     */
     private boolean myTurn;
+    /**
+     * PrintWriter object.
+     */
     private PrintWriter pw;
+    /**
+     * Scanner object.
+     */
     private Scanner sc;
+    /**
+     * Array which contains the ships.
+     */
     private int[][] map;
+    /**
+     * Whether the game has started.
+     */
     private boolean start = false;
+    /**
+     * Whether the game is still running.
+     */
     private boolean game = true;
 
     /**
@@ -46,7 +69,7 @@ public class TorpedoClient {
      * step if it goes second.
      *
      * @throws IOException If an input or output exception occurred.
-
+     *
      */
     private void start() throws IOException {
         try {
@@ -146,7 +169,7 @@ public class TorpedoClient {
      *
      * @param e the MouseEvent
      */
-    void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
         new Thread() {
             @Override
             public void run() {
@@ -208,7 +231,7 @@ public class TorpedoClient {
      *
      * @param e the KeyEvent
      */
-    void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
         if (start == false) {
             try {
                 start();
@@ -217,12 +240,13 @@ public class TorpedoClient {
             }
         }
     }
+
     /**
-    * Checks if all the ships is destroyed.
-    *
-    * @param coord Matrix which contains the positions of the ships, past tips.
-    * @return Whether the game is over.
-    */
+     * Checks if all the ships is destroyed.
+     *
+     * @param coord Matrix which contains the positions of the ships, past tips.
+     * @return Whether the game is over.
+     */
     private boolean gameOver(String[] coord) {
         if (map[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])] == 3) {
             int count = 0;

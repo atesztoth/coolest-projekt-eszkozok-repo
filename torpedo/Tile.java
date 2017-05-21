@@ -11,7 +11,13 @@ import javax.swing.ImageIcon;
  */
 public class Tile extends Rectangle {
 
+    /**
+     * Type of the tile.
+     */
     private int type;
+    /**
+     * Image of the tile.
+     */
     private Image image;
 
     /**

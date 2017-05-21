@@ -1,4 +1,3 @@
-
 package torpedo;
 
 import java.awt.Color;
@@ -13,12 +12,33 @@ import java.awt.event.MouseEvent;
  */
 class TorpedoView {
 
+    /**
+     * Width of the panel.
+     */
     private double width;
+    /**
+     * Height of the panel.
+     */
     private double height;
+    /**
+     * Players turn or not.
+     */
     private boolean myTurn;
+    /**
+     * Whether the player won or not.
+     */
     private boolean win;
+    /**
+     * Whether the player lost or not.
+     */
     private boolean lose = false;
+    /**
+     * Game started or not.
+     */
     private boolean start = false;
+    /**
+     * Whether there was an error or not.
+     */
     private boolean error = false;
 
     /**
@@ -55,7 +75,7 @@ class TorpedoView {
      * @param width Width of the panel.
      * @param height Height of the Panel.
      */
-    TorpedoView(double width, double height) {
+    public TorpedoView(double width, double height) {
         this.width = width;
         this.height = height;
 
@@ -159,7 +179,7 @@ class TorpedoView {
      *
      * @param myTurn Boolean to set.
      */
-    void setTurn(boolean myTurn) {
+    public void setTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
 
@@ -203,7 +223,7 @@ class TorpedoView {
      * @param target Coordinates of the target.
      * @param hit Target or miss.
      */
-    void setTarget(String target, boolean hit) {
+    public void setTarget(String target, boolean hit) {
         String[] coord = target.split(" ");
         if (hit) {
             enemy[Integer.parseInt(coord[0])][Integer.parseInt(coord[1])].setType(1);
@@ -218,7 +238,7 @@ class TorpedoView {
      * @param i X coordinate of enemys tip.
      * @param j Y coordinate of enemys tip.
      */
-    void setTile(int i, int j) {
+    public void setTile(int i, int j) {
         if (own[i][j].getType() == 3) {
             own[i][j].setType(4);
         } else {
@@ -268,7 +288,7 @@ class TorpedoView {
      *
      * Set wait to true.
      */
-    void setWait() {
+    public void setWait() {
         wait = true;
     }
 
