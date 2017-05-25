@@ -16,7 +16,6 @@
                     </manifest>
             </jar>
             <jar destfile="TorpedoServer.jar" basedir="out/classes">
-                    <fileset dir="images"/>
                     <manifest>
                             <attribute name="Main-Class"
                             value="torpedo.TorpedoServer" />
