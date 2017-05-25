@@ -4,5 +4,6 @@
 *.iml
 *.class
 /META-INF/
-*.junit
+/junit/
 /*.jar
+/org/
